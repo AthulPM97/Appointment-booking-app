@@ -1,7 +1,8 @@
+var edit = false;
 
 window.addEventListener('DOMContentLoaded', () => {
   //get all keys from crudcrud
-  axios.get(' https://crudcrud.com/api/efcf04bed4ea403589174fee592751c0/appointementData')
+  axios.get(' https://crudcrud.com/api/963cbff8107040e9be9c8d6e1921ff3f/appointementData')
   .then((response) => {
       var users = response.data;
       users.forEach(user => {
@@ -22,13 +23,25 @@ submitButton.addEventListener("click", (e) => {
       name: name,
       emailId: emailId 
     };
-    axios.post(' https://crudcrud.com/api/efcf04bed4ea403589174fee592751c0/appointementData',
-    object)
-    .then((response) => {
-      console.log(response);
-      addNewLineElement(response.data);
-    })
-    .catch(err => console.log(err));
+    if(edit === false){
+      axios.post('https://crudcrud.com/api/963cbff8107040e9be9c8d6e1921ff3f/appointementData',
+      object)
+      .then((response) => {
+        //console.log(response);
+        addNewLineElement(response.data);
+      })
+      .catch(err => console.log(err));
+    } else {
+      edit = false;
+      axios.put(`https://crudcrud.com/api/963cbff8107040e9be9c8d6e1921ff3f/appointementData/${id}`,
+      object).then((response) => {
+        addNewLineElement(response.data)
+      })
+      .catch(err => console.log(err));
+    }
+    
+  } else {
+    alert('Please enter details!');
   }
 });
 
@@ -41,34 +54,36 @@ function addNewLineElement(object) {
   );
   
   //edit button
-  const a1 = document.createElement("input");
-  a1.type = "button";
-  a1.value = "Edit";
-  a1.addEventListener("click", () => {
+  const editBtn = document.createElement("input");
+  editBtn.type = "button";
+  editBtn.value = "Edit";
+  //edit event
+  editBtn.addEventListener("click", () => {
     console.log(object);
+    edit = true;
+    var id = object._id;
     document.getElementById("name").value = object.name;
     document.getElementById("email").value = object.emailId;
     li.remove();
   });
-  a1.className = "delete";
-  a1.style.border = "2px solid green";
-  li.appendChild(a1);
+  editBtn.className = "edit";
+  editBtn.style.border = "2px solid green";
+  li.appendChild(editBtn);
 
   //delete button
-  const a = document.createElement("input");
-  a.type = "button";
-  a.value = "delete";
+  const deleteBtn = document.createElement("input");
+  deleteBtn.type = "button";
+  deleteBtn.value = "Delete";
 
   //delete event
-  a.addEventListener("click", () => {
-    //localStorage.removeItem(object.emailId);
-    console.log(object._id);
-    axios.delete(` https://crudcrud.com/api/efcf04bed4ea403589174fee592751c0/appointementData/${object._id}`)
+  deleteBtn.addEventListener("click", () => {
+    //delete from crudcrud and remove li
+    axios.delete(`https://crudcrud.com/api/963cbff8107040e9be9c8d6e1921ff3f/appointementData/${object._id}`)
     li.remove();
   });
-  a.className = "delete";
-  a.style.border = "2px solid red";
-  li.appendChild(a);
+  deleteBtn.className = "delete";
+  deleteBtn.style.border = "2px solid red";
+  li.appendChild(deleteBtn);
 
   ul.appendChild(li);
 }
