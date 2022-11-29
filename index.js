@@ -1,21 +1,20 @@
-const submitButton = document.getElementById("submit");
 
-if (document.readyState !== "loading") {
-
+window.addEventListener('DOMContentLoaded', () => {
   //get all keys from crudcrud
   axios.get('https://crudcrud.com/api/8dda5773de6d43cfa6863d7ae682a483/appointementData')
   .then((response) => {
-    response.forEach((key) => {
-      addNewLineElement(key);
-    });
-  }) 
-  .catch(err => console.log(err));
-  console.log("keys", keys);
-}
-// const listOfPeople = []
+      var users = response.data;
+      users.forEach(user => {
+        addNewLineElement(user);
+      });
+    })
+    .catch(err => console.log(err));
+}); 
+  
+const submitButton = document.getElementById("submit");
 //submit button click event
 submitButton.addEventListener("click", (e) => {
-  //e.preventDefault();
+  e.preventDefault();
   const emailId = document.getElementById("email").value;
   const name = document.getElementById("name").value;
   if (emailId.length > 0 && name.length > 0) {
@@ -27,11 +26,9 @@ submitButton.addEventListener("click", (e) => {
     object)
     .then((response) => {
       console.log(response);
-      addNewLineElement(response);
+      addNewLineElement(response.data);
     })
     .catch(err => console.log(err));
-    //localStorage.setItem(emailId, JSON.stringify(object));
-    //addNewLineElement(object);
   }
 });
 
@@ -42,8 +39,7 @@ function addNewLineElement(object) {
   li.appendChild(
     document.createTextNode(object.name + " " + object.emailId + " ")
   );
-  // li.appendChild()
-  console.log(document.createElement("i"));
+  
   //edit button
   const a1 = document.createElement("input");
   a1.type = "button";
@@ -56,13 +52,13 @@ function addNewLineElement(object) {
   });
   a1.className = "delete";
   a1.style.border = "2px solid green";
-  console.log(a1);
   li.appendChild(a1);
 
   //delete button
   const a = document.createElement("input");
   a.type = "button";
   a.value = "delete";
+
   //delete event
   a.addEventListener("click", () => {
     localStorage.removeItem(object.emailId);
@@ -70,9 +66,7 @@ function addNewLineElement(object) {
   });
   a.className = "delete";
   a.style.border = "2px solid red";
-  console.log(a);
   li.appendChild(a);
-  console.log(li);
 
   ul.appendChild(li);
 }
