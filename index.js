@@ -1,7 +1,7 @@
 
 window.addEventListener('DOMContentLoaded', () => {
   //get all keys from crudcrud
-  axios.get('https://crudcrud.com/api/8dda5773de6d43cfa6863d7ae682a483/appointementData')
+  axios.get(' https://crudcrud.com/api/efcf04bed4ea403589174fee592751c0/appointementData')
   .then((response) => {
       var users = response.data;
       users.forEach(user => {
@@ -22,7 +22,7 @@ submitButton.addEventListener("click", (e) => {
       name: name,
       emailId: emailId 
     };
-    axios.post('https://crudcrud.com/api/8dda5773de6d43cfa6863d7ae682a483/appointementData',
+    axios.post(' https://crudcrud.com/api/efcf04bed4ea403589174fee592751c0/appointementData',
     object)
     .then((response) => {
       console.log(response);
@@ -61,7 +61,9 @@ function addNewLineElement(object) {
 
   //delete event
   a.addEventListener("click", () => {
-    localStorage.removeItem(object.emailId);
+    //localStorage.removeItem(object.emailId);
+    console.log(object._id);
+    axios.delete(` https://crudcrud.com/api/efcf04bed4ea403589174fee592751c0/appointementData/${object._id}`)
     li.remove();
   });
   a.className = "delete";
