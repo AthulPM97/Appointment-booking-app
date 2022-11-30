@@ -1,5 +1,5 @@
 var edit = false;
-
+var id;
 window.addEventListener('DOMContentLoaded', () => {
   //get all keys from crudcrud
   axios.get(' https://crudcrud.com/api/963cbff8107040e9be9c8d6e1921ff3f/appointementData')
@@ -24,14 +24,17 @@ submitButton.addEventListener("click", (e) => {
       emailId: emailId 
     };
     if(edit === false){
+      console.log("adding")
       axios.post('https://crudcrud.com/api/963cbff8107040e9be9c8d6e1921ff3f/appointementData',
       object)
       .then((response) => {
         //console.log(response);
         addNewLineElement(response.data);
+        location.reload();
       })
       .catch(err => console.log(err));
     } else {
+      console.log("editing");
       edit = false;
       axios.put(`https://crudcrud.com/api/963cbff8107040e9be9c8d6e1921ff3f/appointementData/${id}`,
       object).then((response) => {
@@ -61,7 +64,7 @@ function addNewLineElement(object) {
   editBtn.addEventListener("click", () => {
     console.log(object);
     edit = true;
-    var id = object._id;
+    id = object._id;
     document.getElementById("name").value = object.name;
     document.getElementById("email").value = object.emailId;
     li.remove();
